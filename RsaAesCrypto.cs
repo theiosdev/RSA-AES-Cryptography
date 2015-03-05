@@ -1,5 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 
-   class RsaAesCrypto
+namespace RsaAesCrypto
+{
+    class Program
     {
         static StreamWriter sw = new StreamWriter(@"D:\crypto.txt");
 
@@ -12,8 +21,7 @@
             byte[] cipherRsa = RsaEncryption("xml", "Hello Rsa", publicKeyXml);
             sw.WriteLine("Cipher Rsa: {0}", Convert.ToBase64String(cipherRsa));            
             string plainTextRsa = RsaDecryption("xml", cipherRsa, privateKeyXml);
-            sw.WriteLine("PlainText Rsa: {0}", plainTextRsa);
-            
+            sw.WriteLine("PlainText Rsa: {0}", plainTextRsa);            
 
             sw.WriteLine("\n\n-----AES-----\n");
             RijndaelManaged aesKeyObj = CreateAesKey();
@@ -23,7 +31,6 @@
             sw.WriteLine("Cipher Aes: {0}", Convert.ToBase64String(cipherAes));
             string plainTextAes = AesDecryption(cipherAes, keyAes, IV);
             sw.WriteLine("PlainText Aes: {0}\n", plainTextAes);
-
 
             sw.WriteLine("\n\n-----RSA with AES-----\n");
             byte[] cipherData = AesEncryption("Hello Rsa with Aes", keyAes, IV);
@@ -93,7 +100,6 @@
         static public RijndaelManaged CreateAesKey()
         {
             RijndaelManaged Crypto = new RijndaelManaged();
-            //Crypto.IV = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             Crypto.KeySize = 128;
 
             sw.WriteLine("BlockSize: {0}", Crypto.BlockSize);
@@ -105,6 +111,7 @@
             sw.WriteLine("LegalKeySizes: {0}", Crypto.LegalKeySizes);
             sw.WriteLine("Mode: {0}", Crypto.Mode);
             sw.WriteLine("Padding: {0}\n", Crypto.Padding);
+
             return Crypto;
         }
 
@@ -160,3 +167,4 @@
             return plaintext;
         }       
     }
+}
